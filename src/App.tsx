@@ -59,19 +59,19 @@ export default function Board() {
     
     setCells(newCells);
   }
-  function checkVictory()
+  function checkVictory(newCells:Array<Array<string>>)
   {
     let flag=0;
-    let lastValue = cells[0][0]
+    let lastValue = newCells[0][0]
     for(let y=0;y<size;y++)
     {
       for(let x=0;x<size;x++)
       {
-        if(lastValue>cells[y][x])
+        if(lastValue>newCells[y][x])
         {
           flag=1;
         }
-        lastValue=cells[y][x];
+        lastValue=newCells[y][x];
       }
     }
     if(flag==0)
@@ -103,7 +103,8 @@ export default function Board() {
       setCurrentEmpty({x:x,y:y});
       newCells[y][x]=16;
       setCells(newCells);
-      checkVictory();
+      checkVictory(newCells);
+      
     }
     else if(y===currentEmpty.y)
     {
@@ -124,6 +125,7 @@ export default function Board() {
       setCurrentEmpty({x:x,y:y});
       newCells[y][x]=16;
       setCells(newCells);
+      checkVictory(newCells);
     }
   }
   
