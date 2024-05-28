@@ -26,6 +26,10 @@
   border: 2px solid black;
   margin: -1px;
   cursor: pointer;
+  transition: background-color 0.1s;
+}
+.cell:hover {
+  background-color: #dfdfdf;
 }
 .board {
   display: flex;
