@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import './App.css'
 import Cell from './components/Cell';
 
@@ -7,8 +7,8 @@ const randomizerPassages = 200
 const dirs = [size, -size, 1, -1]
 
 function App() {
-  const [cells, setCells] = useState(Array(size).fill(Array(size).fill("")))
-  const [currentEmpty, setCurrentEmpty] = useState<{x:number,y:number}>({});
+  const [cells, setCells] = useState(Array.from({ length: size }, () => Array(size).fill("")))
+  const currentEmpty = useMemo(findEmptyPosition,cells);
 
   function pickSwitchCell(switch1: number) {
     let switch2: number;
@@ -38,18 +38,22 @@ function App() {
       newNumbers[switch2] = size * size;
       emptyCellIndex = switch2;
     }
+
+    
     return newNumbers
   }
 
   function setBoard(numbers: Array<number>) {
-    const newCells = Array(size).fill(Array(size).fill(""));
+    const newCells = Array.from({ length: size }, () => Array(size).fill(""));
     let i=0;
     for(let y=0; y < size; y++) {
       for(let x=0; x < size; x++) {
         newCells[y][x] = numbers[i];
+        console.log(numbers[i],x,y);
         i++;
       }
     }  
+    console.log(newCells);
     
     setCells(newCells);
   }
@@ -76,6 +80,7 @@ function App() {
   }
   function onCellClick(x:number,y:number)
   {
+    
     console.log("x: ",x, " y: ",y);
     console.log(currentEmpty)
     const newCells= cells.map(row => [...row]);
@@ -95,7 +100,6 @@ function App() {
             newCells[i][x]=cells[i+1][x];
           }
       }
-      setCurrentEmpty({x:x,y:y});
       newCells[y][x]=16;
       setCells(newCells);
       checkVictory(newCells);
@@ -117,11 +121,25 @@ function App() {
             newCells[y][i]=cells[y][i+1];
           }
       }
-      setCurrentEmpty({x:x,y:y});
       newCells[y][x]=16;
       setCells(newCells);
       checkVictory(newCells);
     }
+  }
+
+  function findEmptyPosition()
+  {
+    for(let y=0;y<size;y++)
+    {
+      for(let x=0;x<size;x++)
+      {
+        if(cells[y][x]===size*size)
+        {
+          return {x:x, y:y};
+        }
+      }
+    }
+    return {x:null,y:null};
   }
   
   useEffect(() => {
@@ -133,12 +151,12 @@ function App() {
     <div className='board'>
       {
         [...Array(size)].map((_, yIndex) =>(
-          <div className='board-row'>
+          <div className='board-row' key={yIndex}>
             {[...Array(size)].map((_, xIndex) => {
               const currentValue = cells[yIndex][xIndex];
               return(
                 <Cell
-                  key={xIndex + '-' + yIndex}
+                  key={xIndex}
                   value={currentValue < 16 ? currentValue: null}
                   x={xIndex}
                   y={yIndex}
