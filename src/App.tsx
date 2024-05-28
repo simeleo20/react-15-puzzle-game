@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 export default function Board() {
+  
   let size = 4;
   const [cells,setCells] = useState(Array(size).fill(Array(size).fill("")))
   const [currentEmpty, setCurrentEmpty] = useState<{x:number,y:number}>({});
   //const currentEmpty:{x:number,y:number} = {x:0,y:0};
   function randomizeNumeri(){
-    let empty:number=0;
+    let empty:number=15;
     for(let i=0;i<size*size;i++)
     {
       if(numeri[i]==16)
@@ -19,18 +20,23 @@ export default function Board() {
     {
       let switch1 = empty;
       let switch2:number;
+      let dir:number; 
       do{
-        let dirs= [4,-4,1,-1]
-        let dir =  dirs[Math.floor(Math.random()*(4))];
+        let dirs = [4,-4,1,-1]
+        dir =  dirs[Math.floor(Math.random()*(4))];
         switch2=switch1+dir;
-      }while(switch2>=size*size||switch2<0);
-      let out = [...numeri]
-      let temp = out[switch1];
-      out[switch1]=out[switch2];
-      out[switch2]=temp;
-      numeri=out;
+      }while(switch2>=size*size||switch2<0||(switch1%4==3 && dir == 1)||(switch1%4 ==0&& dir==-1));
+
+      
+      console.log(numeri,empty);
+      
+      
+      let temp = numeri[switch1];
+      numeri[switch1]=numeri[switch2];
+      numeri[switch2]=temp;
       empty=switch2;
     }
+    console.log(numeri,empty);
   }
   function setBoard()
   {
@@ -120,11 +126,12 @@ export default function Board() {
       setCells(newCells);
     }
   }
-  let numeri: number[] = [];
-
+  
+  let numeri: number[];
   
   useEffect(() => {
-    
+    console.log("inizio");
+    numeri = [];
     for(let i = 0; i<size*size;i++)
     {
       numeri.push(i+1);
