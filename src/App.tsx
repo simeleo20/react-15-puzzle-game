@@ -49,11 +49,9 @@ function App() {
     for(let y=0; y < size; y++) {
       for(let x=0; x < size; x++) {
         newCells[y][x] = numbers[i];
-        console.log(numbers[i],x,y);
         i++;
       }
     }  
-    console.log(newCells);
     
     setCells(newCells);
   }
@@ -81,47 +79,45 @@ function App() {
   function onCellClick(x:number,y:number)
   {
     
-    console.log("x: ",x, " y: ",y);
-    console.log(currentEmpty)
     const newCells= cells.map(row => [...row]);
     if(x===currentEmpty.x)
     {
-      if(y<currentEmpty.y) //verso il basso
+      if(y<currentEmpty.y) //downward
       {
         for(let i = currentEmpty.y;i>y;i--)
         {
           newCells[i][x]=cells[i-1][x];
         }
       }
-      if(y>currentEmpty.y)//verso l'alto
+      if(y>currentEmpty.y)//upward
       {
         for(let i = currentEmpty.y;i<y;i++)
           {
             newCells[i][x]=cells[i+1][x];
           }
       }
-      newCells[y][x]=16;
+      newCells[y][x]=size*size;
       setCells(newCells);
       checkVictory(newCells);
       
     }
     else if(y===currentEmpty.y)
     {
-      if(x<currentEmpty.x) //verso destra
+      if(x<currentEmpty.x) //to the right
       {
         for(let i = currentEmpty.x;i>x;i--)
         {
           newCells[y][i]=cells[y][i-1];
         }
       }
-      if(x>currentEmpty.x)//verso sinistra
+      if(x>currentEmpty.x)//to the left
       {
         for(let i = currentEmpty.x;i<x;i++)
           {
             newCells[y][i]=cells[y][i+1];
           }
       }
-      newCells[y][x]=16;
+      newCells[y][x]=size*size;
       setCells(newCells);
       checkVictory(newCells);
     }
@@ -157,7 +153,7 @@ function App() {
               return(
                 <Cell
                   key={xIndex}
-                  value={currentValue < 16 ? currentValue: null}
+                  value={currentValue < size*size ? currentValue: null}
                   x={xIndex}
                   y={yIndex}
                   onClick={onCellClick}
