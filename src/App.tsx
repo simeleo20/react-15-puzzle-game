@@ -19,8 +19,8 @@ function App() {
     } while (
       switch2 >= size * size ||
       switch2 < 0 ||
-      (switch1 % size == 3 && dir == 1) ||
-      (switch1 % size == 0 && dir == -1)
+      (switch1 % size === 3 && dir === 1) ||
+      (switch1 % size === 0 && dir === -1)
     );   
     
     return switch2
@@ -71,7 +71,7 @@ function App() {
         lastValue=newCells[y][x];
       }
     }
-    if(flag==0)
+    if(flag===0)
     {
       alert("hai vinto");
     }
